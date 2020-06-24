@@ -25,11 +25,20 @@ namespace sample_barcode
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
+            if (string.IsNullOrEmpty(Configuration.GetValue<string>("Settings:AsposeCloudAppKey"))
+                || string.IsNullOrEmpty(Configuration.GetValue<string>("Settings:AsposeCloudAppSid"))
+                || string.IsNullOrEmpty(Configuration.GetValue<string>("Settings:GroupdocsCloudAppSid"))
+                || string.IsNullOrEmpty(Configuration.GetValue<string>("Settings:GroupdocsCloudAppKey"))
+            ) throw new Exception("Apose Cloud AppSid/key or Groupdocs Cloud AppSid/key pair not defined");
+            
+            logger.LogInformation($"Using {Configuration.GetValue<string>("Settings:AsposeCloudAppSid")} for barcode, {Configuration.GetValue<string>("Settings:GroupdocsCloudAppSid")} for conversion");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
