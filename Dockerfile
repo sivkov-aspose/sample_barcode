@@ -21,7 +21,4 @@ RUN apt-get update \
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-ADD mitmproxy-ca-cert.cer /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt
-RUN chmod 644 /usr/local/share/ca-certificates/mitmproxy-ca-cert.crt && update-ca-certificates
-
 ENTRYPOINT ["dotnet", "sample_barcode.dll"]
